@@ -15,13 +15,13 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        #self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
         self.database_path = "postgresql://{}:{}@{}/{}".format(
             "student", "student", "localhost:5432", self.database_name
         )
 
         setup_db(self.app, self.database_path)
 
+        # to test successful result
         self.new_question = {
             "question": "What is the largest country?",
             "answer": "Russia",
@@ -29,14 +29,13 @@ class TriviaTestCase(unittest.TestCase):
             "category": 3
         }
 
+        # to test unsuccessful result
         self.invalild_question = {
             "question": "What is the largest country?",
             "answer": "Russia",
             "difficulty": 10,
             "category": 8
         }
-
-        self.prevQuestions = Question.query.filter(Question.difficulty == 2).all()
 
         # binds the app to the current context
         with self.app.app_context():
@@ -50,8 +49,7 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
+    Tests for successful operation and for expected errors.
     """
     def test_get_paginated_questions(self):
         res = self.client().get("/questions")
@@ -96,7 +94,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertTrue(data["questions"])
+        self.assertTrue(data["total_questions"])
         self.assertEqual(len(data["questions"]), 2)
         self.assertTrue(data["current_category"])
 
@@ -121,7 +119,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['deleted'], 4)
         self.assertEqual(question, None)
 
-    def test_404_if_question_does_not_exist(self):
+    def test_422_if_question_does_not_exist(self):
         res = self.client().delete("/questions/1000")
         data = json.loads(res.data)
 
@@ -137,7 +135,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], True)
         self.assertTrue(data["categories"])
 
-    def test_404_requesting_invalid_endpoint(self):
+    def test_404_requesting_invalid_address(self):
         res = self.client().get("/categories/1")
         data = json.loads(res.data)
 

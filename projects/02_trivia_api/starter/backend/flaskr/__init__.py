@@ -8,6 +8,9 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+'''
+Returns questions to be displayed on current page
+'''
 def paginated_questions(request, selection):
   page = request.args.get("page", 1, type=int)
   start = (page - 1) * QUESTIONS_PER_PAGE
@@ -18,6 +21,9 @@ def paginated_questions(request, selection):
 
   return current_questions
 
+'''
+Returns {"id":"type"} formatted dictionary for category
+'''
 def get_categories():
   categories = Category.query.order_by(Category.id).all()
   categories_dict = {}
@@ -36,7 +42,7 @@ def create_app(test_config=None):
   CORS(app, resources={r"/*": {"origins": "*"}})
 
   '''
-  @TODO: Use the after_request decorator to set Access-Control-Allow
+  Setting Access-Control-Allow
   '''
   @app.after_request
   def after_request(response):
@@ -44,7 +50,7 @@ def create_app(test_config=None):
       "Access-Control-Allow-Headers", "Content-Type,Authorization,true"
     )
     response.headers.add(
-      "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS"
+      "Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS"
     )
     return response
 
@@ -197,11 +203,11 @@ def create_app(test_config=None):
     quiz_category = body.get("quiz_category", None)
     category_id = quiz_category.get('id')
     
-    if(category_id == 0):
+    if(category_id == 0): # all category
       rand_question = random.choice(Question.query
         .filter(~(Question.id.in_(prev_questions)))
         .all())
-    else:
+    else: # selected category
       rand_question = random.choice(Question.query
         .filter
         (
@@ -222,7 +228,7 @@ def create_app(test_config=None):
 
   '''
   Error handlers for all expected errors
-  including 500, 400, 404 and 422. 
+  including 400, 404, 422 and 500
   '''
   @app.errorhandler(404)
   def not_found(error):

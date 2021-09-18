@@ -210,7 +210,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 - General:
     - Deletes a specified question using the id of the question
     - Request Arguments: id - integer
-    - Returns: Does not need to return anything besides the appropriate HTTP status code. Optionally can return the id of the question. If you are able to modify the frontend, you can have it remove the question using the id instead of refetching the questions. 
+    - Returns: the appropriate HTTP status code and the id of the deleted question.
 - `curl -X DELETE http://127.0.0.1:5000/questions/6`
 ```
 {
@@ -218,7 +218,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
   "success": true
 }
 ```
-### POST '/quizzes'
+### POST /quizzes
 - General:
     - Sends a post request in order to get the next question 
     - Request Body: 
@@ -237,7 +237,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
     }
 }
 ```
-### POST '/questions'
+### POST /questions
 - Sends a post request in order to add a new question
 - Request Body: 
 ```
@@ -249,7 +249,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 }
 ```
 - Returns: Does not return any new data
-### POST '/questions'
+### POST /questions
 - Sends a post request in order to search for a specific question by search term 
 - Request Body: 
 ```
@@ -257,7 +257,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
     'searchTerm': 'this is the term the user is looking for'
 }
 ```
-- Returns: any array of questions, a number of totalQuestions that met the search term and the current category string 
+- Returns: any array of questions, a number of total_questions that met the search term and the current category string 
 ```{
     'questions': [
         {
@@ -268,8 +268,8 @@ One note before you delve into your tasks: for each endpoint, you are expected t
             'category': 5
         },
     ],
-    'totalQuestions': 100,
-    'currentCategory': 'Entertainment'
+    'total_questions': 100,
+    'current_category': 'Entertainment'
 }
 ```
 ## Testing
