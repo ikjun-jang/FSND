@@ -240,21 +240,25 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 ### POST '/questions'
 - Sends a post request in order to add a new question
 - Request Body: 
+```
 {
     'question':  'Heres a new question string',
     'answer':  'Heres a new answer string',
     'difficulty': 1,
     'category': 3,
 }
+```
 - Returns: Does not return any new data
 ### POST '/questions'
 - Sends a post request in order to search for a specific question by search term 
 - Request Body: 
+```
 {
     'searchTerm': 'this is the term the user is looking for'
 }
+```
 - Returns: any array of questions, a number of totalQuestions that met the search term and the current category string 
-{
+```{
     'questions': [
         {
             'id': 1,
@@ -267,6 +271,7 @@ One note before you delve into your tasks: for each endpoint, you are expected t
     'totalQuestions': 100,
     'currentCategory': 'Entertainment'
 }
+```
 ## Testing
 To run the tests, run
 ```
