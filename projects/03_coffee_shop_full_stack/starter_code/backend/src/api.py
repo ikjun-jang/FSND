@@ -105,12 +105,12 @@ Endpoint to edit an existing drink having <id>
 @app.route("/drinks/<int:drink_id>", methods=["PATCH"])
 @requires_auth("patch:drinks")
 def update_drinks(self, drink_id):
-    try:
-        drink = Drink.query.filter(Drink.id==drink_id).one_or_none()
+    drink = Drink.query.filter(Drink.id==drink_id).one_or_none()
         
-        if drink is None:
-            abort(404)
-        
+    if drink is None:
+        abort(404)
+
+    try:    
         body = request.get_json()
         drink.title = body.get('title')
         drink.recipe = json.dumps(body.get('recipe'))
@@ -137,13 +137,13 @@ Endpoint to delete an existing drink having <id>
 '''
 @app.route("/drinks/<int:drink_id>", methods=["DELETE"])
 @requires_auth("delete:drinks")
-def delete_drinks(self, drink_id):
-    try:    
-        drink = Drink.query.filter(Drink.id==drink_id).one_or_none()
+def delete_drinks(self, drink_id):    
+    drink = Drink.query.filter(Drink.id==drink_id).one_or_none()
     
-        if drink is None:
-            abort(404)
-    
+    if drink is None:
+        abort(404)
+
+    try:
         drink.delete()
         return jsonify(
             {
