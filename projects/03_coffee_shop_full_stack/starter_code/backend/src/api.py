@@ -178,10 +178,11 @@ def not_found(error):
     }), 404
 
 '''
-AuthError Exception
+Error handler for AuthError Exceptions
 A standardized way to communicate auth failure modes
 '''
-class AuthError(Exception):
-    def __init__(self, error, status_code):
-        self.error = error
-        self.status_code = status_code
+@app.errorhandler(AuthError)
+def unauthorized(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
