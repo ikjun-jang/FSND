@@ -1,0 +1,178 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.4
+-- Dumped by pg_dump version 13.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: clubs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.clubs (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    category character varying,
+    asset character varying
+);
+
+
+ALTER TABLE public.clubs OWNER TO postgres;
+
+--
+-- Name: clubs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.clubs_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.clubs_id_seq OWNER TO postgres;
+
+--
+-- Name: clubs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.clubs_id_seq OWNED BY public.clubs.id;
+
+
+--
+-- Name: players; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.players (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    value character varying,
+    club_id integer
+);
+
+
+ALTER TABLE public.players OWNER TO postgres;
+
+--
+-- Name: players_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.players_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.players_id_seq OWNER TO postgres;
+
+--
+-- Name: players_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.players_id_seq OWNED BY public.players.id;
+
+
+--
+-- Name: clubs id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clubs ALTER COLUMN id SET DEFAULT nextval('public.clubs_id_seq'::regclass);
+
+
+--
+-- Name: players id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players ALTER COLUMN id SET DEFAULT nextval('public.players_id_seq'::regclass);
+
+
+--
+-- Data for Name: clubs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.clubs (id, name, category, asset) FROM stdin;
+1	Tottenham Hotspur	Premier League	$7,500,000,000
+2	Liverpool FC	Premier League	$5,500,000,000
+3	Dallas Mavericks	NBA	$6,500,000,000
+\.
+
+
+--
+-- Data for Name: players; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.players (id, name, value, club_id) FROM stdin;
+1	Salah	100 million euro	2
+2	Luis Diaz	65 million euro	2
+3	Alex Arnold	80 million euro	2
+4	Harry Kane	100 million euro	1
+5	Son Heung-Min	90 million euro	1
+6	Rodrigo Bentancur	50 million euro	1
+7	Christian Romero	70 million euro	1
+8	Luka Doncic	80 million USD	3
+9	Trey Burke	30 million USD	3
+\.
+
+
+--
+-- Name: clubs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.clubs_id_seq', 3, true);
+
+
+--
+-- Name: players_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.players_id_seq', 9, true);
+
+
+--
+-- Name: clubs clubs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clubs
+    ADD CONSTRAINT clubs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: players players_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT players_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: players players_club_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT players_club_id_fkey FOREIGN KEY (club_id) REFERENCES public.clubs(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
