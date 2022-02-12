@@ -60,7 +60,7 @@ def get_token_auth_header():
 
 '''
 @INPUTS
-    permission: string permission (i.e. 'post:drink')
+    permission: string permission (i.e. 'post:clubs')
     payload: decoded jwt payload
 
 raises an AuthError if permissions are not included in the payload
@@ -150,7 +150,7 @@ def verify_decode_jwt(token):
 '''
 requires_auth(permission) decorator method
 @INPUTS
-    permission: string permission (i.e. 'post:drink')
+    permission: string permission (i.e. 'post:clubs')
 
 it uses the get_token_auth_header method to get the token
 it uses the verify_decode_jwt method to decode the jwt

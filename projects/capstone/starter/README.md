@@ -3,7 +3,7 @@
 ## Introduction
 The Sports Agency models a company that creates partnerships with sports clubs and players, whose responsibility is to make contracts between their players and clubs. As an executive director within the company, you can perform every action needed to manage both players and clubs while a contract manager or an assistant can only perform specified actions that their authorities allow.
 
-### Installing Dependencies for the Backend
+### Installing Dependencies - Local Backend
 
 1. **Python 3.9** - Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
@@ -11,30 +11,24 @@ The Sports Agency models a company that creates partnerships with sports clubs a
 2. **Virtual Enviornment** - We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
 
-3. **PIP Dependencies** - Once you have your virtual environment setup and running, install dependencies by running:
+3. **Environment Variables Setup** - set up the environment variables as:
+```bash
+source setup.sh
+```
+
+4. **PIP Dependencies** - Once you have your virtual environment setup and running, install dependencies by running:
 ```bash
 pip install -r requirements.txt
 ```
 This will install all of the required packages we selected within the `requirements.txt` file.
 
 
-4. **Key Dependencies**
+5. **Key Dependencies**
  - [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
  - [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
 
  - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
-
-
-5. **Heroku Setup**
- - Create an account with Heroku [here](https://signup.heroku.com/)
- 
- - Download/install the Heroku CLI in order to create our Heroku application and manage it. There are multiple ways to install the Heroku command-line tool, as outlined in the [official installation instructions](https://devcenter.heroku.com/articles/heroku-cli#download-and-install)
- 
- - Log into heroku with the following command
- ```bash
- heroku login -i
- ```
 
 ### Database Setup
 With Postgres running, restore a database using the agency.psql file provided. In terminal run:
@@ -66,7 +60,7 @@ curl --request POST \
     - Fetches a list of clubs and the corresponding list of players
     - Request Arguments: None
     - Returns: An object with clubs, a total number of clubs
-- `curl http://127.0.0.1:8080/clubs -H "authorization: Bearer $ACCESS_TOKEN"`
+- `curl https://agent369.herokuapp.com/clubs -H "authorization: Bearer $ACCESS_TOKEN"`
 ```
 {
   "clubs": [
@@ -113,7 +107,7 @@ curl --request POST \
     - Fetches a list of players and the corresponding club
     - Request Arguments: None
     - Returns: An object with players, a total number of players
-- `curl http://127.0.0.1:8080/players -H "authorization: Bearer $ACCESS_TOKEN"`
+- `curl http://agent369.herokuapp.com/players -H "authorization: Bearer $ACCESS_TOKEN"`
 ```
 {
   "players": [
@@ -198,7 +192,7 @@ curl --request POST \
     ```
     - Returns: a single new club object 
 ```
-curl -X POST http://127.0.0.1:8080/clubs \
+curl -X POST http://agent369.herokuapp.com/clubs \
     -H "authorization: Bearer $ACCESS_TOKEN" \
     -H "Content-Type: application/json"
     -d '{"name":"Inter Milan","category":"Serie A","asset":"$7,000,000,000"}'
@@ -227,7 +221,7 @@ curl -X POST http://127.0.0.1:8080/clubs \
     ```
     - Returns: a single new player object 
 ```
-curl -X POST http://127.0.0.1:8080/players \
+curl -X POST http://agent369.herokuapp.com/players \
     -H "authorization: Bearer $ACCESS_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{"name":"Kevin De Bruyne","value":"110 million euro","club_id":2}'
@@ -256,7 +250,7 @@ curl -X POST http://127.0.0.1:8080/players \
     ```
     - Returns: the modified club object 
 ```
-curl -X PATCH http://127.0.0.1:8080/clubs/4 \
+curl -X PATCH http://agent369.herokuapp.com/clubs/4 \
     -H "authorization: Bearer $ACCESS_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{"name":"AC Milan","category":"Serie A","asset":"$6,000,000,000"}'
@@ -285,7 +279,7 @@ curl -X PATCH http://127.0.0.1:8080/clubs/4 \
     ```
     - Returns: the modified player object 
 ```
-curl -X PATCH http://127.0.0.1:8080/players/10 \
+curl -X PATCH http://https://agent369.herokuapp.com/clubs/players/10 \
     -H "authorization: Bearer $ACCESS_TOKEN" \
     -H "Content-Type: application/json" \
     -d '{"name":"Lebandovski","value":"120 million euro","club_id":1}'
@@ -306,7 +300,7 @@ curl -X PATCH http://127.0.0.1:8080/players/10 \
     - Deletes a specified club using the id of the club
     - Request Arguments: id - integer
     - Returns: the appropriate HTTP status code and the id of the deleted question.
-- `curl -X DELETE http://127.0.0.1:8080/clubs/4 -H "authorization: Bearer $ACCESS_TOKEN"`
+- `curl -X DELETE http://https://agent369.herokuapp.com/clubs/clubs/4 -H "authorization: Bearer $ACCESS_TOKEN"`
 ```
 {
   "deleted": 4,
@@ -318,7 +312,7 @@ curl -X PATCH http://127.0.0.1:8080/players/10 \
     - Deletes a specified player using the id of the player
     - Request Arguments: id - integer
     - Returns: the appropriate HTTP status code and the id of the deleted player.
-- `curl -X DELETE http://127.0.0.1:8080/players/10 -H "authorization: Bearer $ACCESS_TOKEN"`
+- `curl -X DELETE http://https://agent369.herokuapp.com/clubs/players/10 -H "authorization: Bearer $ACCESS_TOKEN"`
 ```
 {
   "deleted": 10, 
