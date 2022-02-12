@@ -23,7 +23,18 @@ This will install all of the required packages we selected within the `requireme
 
  - [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
 
-- [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
+ - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
+
+
+5. **Heroku Setup**
+ - Create an account with Heroku [here](https://signup.heroku.com/)
+ 
+ - Download/install the Heroku CLI in order to create our Heroku application and manage it. There are multiple ways to install the Heroku command-line tool, as outlined in the [official installation instructions](https://devcenter.heroku.com/articles/heroku-cli#download-and-install)
+ 
+ - Log into heroku with the following command
+ ```bash
+ heroku login -i
+ ```
 
 ### Database Setup
 With Postgres running, restore a database using the agency.psql file provided. In terminal run:

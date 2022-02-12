@@ -29,13 +29,13 @@ Have name, category and asset
 '''
 class Club(db.Model):  
   __tablename__ = 'clubs'
-
+  
   id = Column(Integer, primary_key=True)
   name = Column(String, nullable=False)
   category = Column(String)
   asset = Column(String)
   players = db.relationship('Player', back_populates='club')
-
+  
   def __init__(self, name, category, asset):
     self.name = name
     self.category = category
@@ -69,13 +69,13 @@ Have name, value and club_id
 '''
 class Player(db.Model):  
   __tablename__ = 'players'
-
+  
   id = Column(Integer, primary_key=True)
   name = Column(String, nullable=False)
   value = Column(String)
   club_id = Column(Integer, ForeignKey('clubs.id'))
   club = db.relationship('Club', back_populates='players')
-
+  
   def __init__(self, name, value, club_id):
     self.name = name
     self.value = value
