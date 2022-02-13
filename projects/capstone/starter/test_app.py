@@ -92,7 +92,7 @@ class AgencyTestCase(unittest.TestCase):
         self.new_player = {
             "name": "Kevin De Bruyne",
             "value": "110 million euro",
-            "club_id": 2
+            "club_id": 1
         }
 
         # to test unsuccessful result
@@ -115,23 +115,6 @@ class AgencyTestCase(unittest.TestCase):
     """
     Tests for successful operation and for expected errors.
     """
-    def test_get_clubs(self):
-        res = self.client().get("/clubs", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data["success"], True)
-        self.assertTrue(data["clubs"])
-        self.assertEqual(len(data["clubs"]), 3)
-
-    def test_404_requesting_invalid_address_to_club(self):
-        res = self.client().get("/club", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "resource not found")
-
     def test_create_new_club(self):
         res = self.client().post("/clubs", json=self.new_club, 
             headers=getUserTokenHeaders('executive.director@udacity.com'))
@@ -156,75 +139,6 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data["success"], False)
         self.assertEqual(data["code"], "unauthorized")
-
-    def test_edit_club(self):
-        res = self.client().patch("/clubs/1", json=self.new_club, 
-            headers=getUserTokenHeaders('contract.manager@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data["success"], True)
-
-    def test_422_sent_invalid_club_info_to_edit(self):
-        res = self.client().patch("/clubs/1", json=self.invalid_club, 
-            headers=getUserTokenHeaders('contract.manager@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "unprocessable")
-
-    def test_403_sent_unauthorized_request_to_edit_club(self):
-        res = self.client().patch("/clubs/1", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 403)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["code"], "unauthorized")
-
-    def test_delete_club(self):
-        res = self.client().delete("/clubs/4", headers=getUserTokenHeaders('executive.director@udacity.com'))
-        data = json.loads(res.data)
-
-        club = Club.query.filter(Club.id == 4).one_or_none()
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data["success"], True)
-        self.assertEqual(data["deleted"], 4)
-        self.assertEqual(club, None)
-
-    def test_404_if_club_does_not_exist(self):
-        res = self.client().delete("/clubs/1000", headers=getUserTokenHeaders('executive.director@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "resource not found")
-
-    def test_403_sent_unauthorized_request_to_delete_club(self):
-        res = self.client().delete("/clubs/3", headers=getUserTokenHeaders('contract.manager@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 403)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["code"], "unauthorized")
-
-    def test_get_players(self):
-        res = self.client().get("/players", headers=getUserTokenHeaders('contract.manager@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data["success"], True)
-        self.assertTrue(data["players"])
-        self.assertEqual(len(data["players"]), 9)
-
-    def test_404_requesting_invalid_address_to_player(self):
-        res = self.client().get("/player", headers=getUserTokenHeaders('contract.manager@udacity.com'))
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "resource not found")
 
     def test_create_new_player(self):
         res = self.client().post("/players", json=self.new_player, 
@@ -251,40 +165,80 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(data["success"], False)
         self.assertEqual(data["code"], "unauthorized")
 
-    def test_edit_player(self):
-        res = self.client().patch("/players/1", json=self.new_player, 
-            headers=getUserTokenHeaders('executive.director@udacity.com'))
+    def test_edit_club(self):
+        res = self.client().patch("/clubs/1", json=self.new_club, 
+            headers=getUserTokenHeaders('contract.manager@udacity.com'))
         data = json.loads(res.data)
-    
+
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
 
-    def test_422_sent_invalid_player_info_to_edit(self):
-        res = self.client().patch("/players/1", json=self.invalid_player, 
-            headers=getUserTokenHeaders('executive.director@udacity.com'))
+    def test_404_sent_nonexistent_club_id_to_edit(self):
+        res = self.client().patch("/clubs/1000", json=self.invalid_club, 
+            headers=getUserTokenHeaders('contract.manager@udacity.com'))
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 422)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "unprocessable")
+        self.assertEqual(data["message"], "resource not found")
 
-    def test_403_sent_unauthorized_request_to_edit_player(self):
-        res = self.client().patch("/players/1", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
+    def test_403_sent_unauthorized_request_to_edit_club(self):
+        res = self.client().patch("/clubs/1", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data["success"], False)
         self.assertEqual(data["code"], "unauthorized")
 
-    def test_delete_player(self):
-        res = self.client().delete("/players/2", headers=getUserTokenHeaders('contract.manager@udacity.com'))
+    def test_edit_player(self):
+        res = self.client().patch("/players/4", json=self.new_player, 
+            headers=getUserTokenHeaders('executive.director@udacity.com'))
+        data = json.loads(res.data)
+    
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+
+    def test_404_sent_nonexistent_player_id_to_edit(self):
+        res = self.client().patch("/players/1000", json=self.invalid_player, 
+            headers=getUserTokenHeaders('executive.director@udacity.com'))
         data = json.loads(res.data)
 
-        player = Player.query.filter(Player.id == 2).one_or_none()
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+
+    def test_403_sent_unauthorized_request_to_edit_player(self):
+        res = self.client().patch("/players/4", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 403)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["code"], "unauthorized")
+
+    def test_get_players(self):
+        res = self.client().get("/players", headers=getUserTokenHeaders('contract.manager@udacity.com'))
+        data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertEqual(data["deleted"], 2)
+
+    def test_404_requesting_invalid_address_to_player(self):
+        res = self.client().get("/player", headers=getUserTokenHeaders('contract.manager@udacity.com'))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+
+    def test_delete_player(self):
+        res = self.client().delete("/players/1", headers=getUserTokenHeaders('contract.manager@udacity.com'))
+        data = json.loads(res.data)
+
+        player = Player.query.filter(Player.id == 1).one_or_none()
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(data["deleted"], 1)
         self.assertEqual(player, None)
 
     def test_404_if_player_does_not_exist(self):
@@ -296,7 +250,48 @@ class AgencyTestCase(unittest.TestCase):
         self.assertEqual(data["message"], "resource not found")
 
     def test_403_sent_unauthorized_request_to_delete_player(self):
-        res = self.client().delete("/players/2", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
+        res = self.client().delete("/players/1", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 403)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["code"], "unauthorized")
+
+    def test_get_clubs(self):
+        res = self.client().get("/clubs", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+
+    def test_404_requesting_invalid_address_to_club(self):
+        res = self.client().get("/club", headers=getUserTokenHeaders('contract.assistant@udacity.com'))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+
+    def test_delete_club(self):
+        res = self.client().delete("/clubs/4", headers=getUserTokenHeaders('executive.director@udacity.com'))
+        data = json.loads(res.data)
+
+        club = Club.query.filter(Club.id == 4).one_or_none()
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(club, None)
+
+    def test_404_if_club_does_not_exist(self):
+        res = self.client().delete("/clubs/1000", headers=getUserTokenHeaders('executive.director@udacity.com'))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data["success"], False)
+        self.assertEqual(data["message"], "resource not found")
+
+    def test_403_sent_unauthorized_request_to_delete_club(self):
+        res = self.client().delete("/clubs/4", headers=getUserTokenHeaders('contract.manager@udacity.com'))
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 403)

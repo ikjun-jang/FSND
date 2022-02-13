@@ -1,4 +1,4 @@
-# Sports Agency Backend
+# Sports Agency API - Backend
 
 ## Introduction
 The Sports Agency models a company that creates partnerships with sports clubs and players, whose responsibility is to make contracts between their players and clubs. As an executive director within the company, you can perform every action needed to manage both players and clubs while a contract manager or an assistant can only perform specified actions that their authorities allow.
@@ -45,6 +45,10 @@ To run the server, execute:
 ```bash
 python app.py
 ```
+
+### API Server URL
+- `https://agent369.herokuapp.com/`
+
 
 ## Endpoints
 ### Obtaining an Access Token
@@ -331,6 +335,6 @@ To run the tests, run
 ```
 dropdb agency_test
 createdb agency_test
-psql -d agency -U postgres -a -f agency.psql
+psql -d agency_test -U postgres -a -f agency.psql
 python test_app.py
 ```

@@ -25,7 +25,12 @@ def create_app(test_config=None):
     club_list = []
 
     if len(clubs) == 0:
-      abort(404)
+      return jsonify(
+        {
+          "success": True,
+          "total_clubs": 0
+        }
+      )
 
     '''
     adding a list of player names to each club
@@ -56,7 +61,12 @@ def create_app(test_config=None):
     player_list = []
 
     if len(players) == 0:
-      abort(404)
+      return jsonify(
+        {
+          "success": True,
+          "total_players": 0
+        }
+      )
 
     '''
     adding club name to each player
